@@ -5,6 +5,13 @@ export async function checkIn(req, res, next) {
     const userId = req.user._id;
     const today = new Date().toISOString().split('T')[0];
 
+    // Frontend se jo camera ki photo (Base64 ya image URL) aayegi
+    const { photo } = req.body;
+
+    if (!photo) {
+      return res.status(400).json({ message: 'Attendance ke liye camera photo zaroori hai!' });
+    }
+
     const existingRecord = await Attendance.findOne({ userId, date: today });
     if (existingRecord) {
       return res.status(400).json({ message: 'Aap aaj pehle hi check-in kar chuke hain' });
@@ -15,6 +22,7 @@ export async function checkIn(req, res, next) {
       date: today,
       checkInTime: new Date(),
       status: 'Present',
+      checkInPhoto: photo, // Database mein photo save ho jayegi
     });
 
     res.status(201).json({ success: true, data: attendance });

@@ -11,6 +11,10 @@ const attendanceSchema = new mongoose.Schema(
       enum: ['Present', 'Absent', 'Late', 'Half-Day'], 
       default: 'Present' 
     },
+    checkInPhoto: { 
+      type: String, 
+      required: true // Camera photo string (Base64) ko save karne ke liye
+    },
   },
   { timestamps: true }
 );
